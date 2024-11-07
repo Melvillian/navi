@@ -38,7 +38,7 @@ First you will need to make Navi aware of your Notion workspace.
 
 4. Add the OpenAI API key to your `.env` file
 5. `cargo build`
-6. `RUST_LOG=INFO cargo run`
+6. `cargo run`
 7. Finally, have a retro conversation with Navi!
 
 ## Helpful Tools

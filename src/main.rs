@@ -3,6 +3,7 @@ use dotenv::dotenv;
 use log::{debug, info, trace};
 use navi::{
     core::{datatypes::Block, helpers::build_markdown_from_trees},
+    intelligence::assistant_flow,
     notion::Notion,
 };
 use notion_client::NotionClientError;
@@ -20,20 +21,27 @@ async fn main() {
             "debug" | "trace" => 1,
             _ => 7,
         },
-        Err(_) => 7,
+        Err(_) => 7, // it means RUST_LOG is not set, so we default to 7 days
     });
 
     let notion = Notion::new(env::var("NOTION_TOKEN").expect("NOTION_TOKEN must be set")).unwrap();
 
     let prompt_info = ingest_notion(notion, dur).await.unwrap();
-    info!(target: "notion", "prompt info:\n{}", prompt_info);
+    debug!(target: "notion", "prompt info:\n{}", prompt_info);
+
+    info!(target: "notion", "Analysis complete! Navi is now ready to guide you through the process of reflecting on your notes");
+    info!(target: "notion", "Let's begin by asking Navi to start the retro, and see what Navi's response is...");
+
+    assistant_flow(prompt_info).await.unwrap();
 }
 
 async fn ingest_notion(notion: Notion, dur: Duration) -> Result<String, NotionClientError> {
+    info!(target: "notion", "Thanks for choosing Navi as your digital mentor! Navi will begin by analyzing your last {} days of notes. This may take several minutes, depending on how dedicated a notetaker you are...", dur.num_days());
     let cutoff = Utc::now() - dur;
 
     let pages_edited_after_cutoff_date = notion.get_last_edited_pages(cutoff).await.unwrap();
     info!(target: "notion", "retrieved {} Pages edited in the last {} days", pages_edited_after_cutoff_date.len(), dur.num_days());
+    info!(target: "notion", "From these Pages, Navi will fetch the notes it needs to guide you in reflecting on the past {} days", dur.num_days());
     let mut pages_and_block_roots = Vec::new();
 
     // TODO: idea: instead of storing the whole Block data, which is 95% worthless data, just strip out the

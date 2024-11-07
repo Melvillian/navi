@@ -1,7 +1,7 @@
 use crate::core::datatypes::{Block, BlockID, Page, PageID};
 use chrono::{DateTime, Duration, Utc};
 use dendron::{Node, Tree};
-use log::{debug, error, info, trace};
+use log::{debug, error, trace};
 use notion_client::{
     endpoints::{
         blocks::retrieve::response::RetrieveBlockChilerenResponse,
@@ -133,7 +133,7 @@ impl Notion {
                 // the (truncated) block roots that we have. This means we may miss out on
                 // important blocks that were updated since the cutoff, but that's the price
                 // we pay in order to limit the time we spend fetching block children.
-                info!(target: "notion", "aborting block retrieval due to time limit");
+                debug!(target: "notion", "aborting page retrieval due to time limit for Page: {}", &page.title);
                 break;
             }
 

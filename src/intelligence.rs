@@ -10,7 +10,7 @@ use async_openai::{
     },
     Client,
 };
-use log::debug;
+use log::{debug, info};
 use thiserror::Error;
 
 #[derive(Error, Debug)]
@@ -48,11 +48,8 @@ pub async fn assistant_flow(markdown_notes: String) -> Result<(), IntelligenceEr
     let query = [("limit", "1")]; //limit the list responses to 1 message
 
     //create a client
-    let client = Client::with_config(
-        OpenAIConfig::new()
-            .with_api_key(env::var("OPENAI_API_KEY").unwrap())
-            .with_org_id("org-cj8ltTe3JDZckoyOR76to9EE"),
-    );
+    let client =
+        Client::with_config(OpenAIConfig::new().with_api_key(env::var("OPENAI_API_KEY").unwrap()));
 
     //create a thread for the conversation
     let thread_request = CreateThreadRequestArgs::default().build()?;
@@ -60,13 +57,13 @@ pub async fn assistant_flow(markdown_notes: String) -> Result<(), IntelligenceEr
     debug!(target: "intelligence", "Thread created with id: {}", thread.id);
 
     // //ask the user for the name of the assistant
-    // println!("--- Enter the name of your assistant");
+    // info!(target: "intelligence", "--- Enter the name of your assistant");
     // //get user input
     // let mut assistant_name = String::new();
     // std::io::stdin().read_line(&mut assistant_name).unwrap();
 
     // //ask the user for the instruction set for the assistant
-    // println!("--- Enter the instruction set for your new assistant");
+    // info!(target: "intelligence", "--- Enter the instruction set for your new assistant");
     // //get user input
     // let mut instructions = "".to_string();
 
@@ -135,7 +132,7 @@ pub async fn assistant_flow(markdown_notes: String) -> Result<(), IntelligenceEr
             is_first_loop_iteration = false;
             "Let's begin the retro".to_string()
         } else {
-            println!("--- Enter your input or type 'exit()' to exit");
+            info!(target: "intelligence", "--- Enter your input or type 'exit()' to exit");
             //get user input
             let mut user_input = String::new();
             std::io::stdin().read_line(&mut user_input).unwrap();
@@ -224,32 +221,32 @@ pub async fn assistant_flow(markdown_notes: String) -> Result<(), IntelligenceEr
                         MessageContent::Refusal(refusal) => refusal.refusal.clone(),
                     };
                     //print the text
-                    println!("--- Response: {}\n", text);
+                    info!(target: "intelligence", "--- Response: {}\n", text);
                 }
                 RunStatus::Failed => {
                     awaiting_response = false;
-                    println!("--- Run Failed: {:#?}", run);
+                    info!(target: "intelligence", "--- Run Failed: {:#?}", run);
                 }
                 RunStatus::Queued => {
-                    println!("--- Run Queued");
+                    info!(target: "intelligence", "--- Run Queued");
                 }
                 RunStatus::Cancelling => {
-                    println!("--- Run Cancelling");
+                    info!(target: "intelligence", "--- Run Cancelling");
                 }
                 RunStatus::Cancelled => {
-                    println!("--- Run Cancelled");
+                    info!(target: "intelligence", "--- Run Cancelled");
                 }
                 RunStatus::Expired => {
-                    println!("--- Run Expired");
+                    info!(target: "intelligence", "--- Run Expired");
                 }
                 RunStatus::RequiresAction => {
-                    println!("--- Run Requires Action");
+                    info!(target: "intelligence", "--- Run Requires Action");
                 }
                 RunStatus::InProgress => {
-                    println!("--- In Progress ...");
+                    info!(target: "intelligence", "--- Waiting for response from OpenAI ...");
                 }
                 RunStatus::Incomplete => {
-                    println!("--- Run Incomplete");
+                    info!(target: "intelligence", "--- Run Incomplete");
                 }
             }
             //wait for 1 second before checking the status again
