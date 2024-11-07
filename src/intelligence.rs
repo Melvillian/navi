@@ -1,9 +1,12 @@
+use std::env;
+
 use async_openai::{
+    config::OpenAIConfig,
     types::{
         AssistantToolFileSearchResources, AssistantToolsFileSearch, CreateAssistantRequestArgs,
         CreateFileRequest, CreateMessageRequestArgs, CreateRunRequestArgs, CreateThreadRequestArgs,
-        CreateVectorStoreRequest, FilePurpose, MessageContent, MessageRole, ModifyAssistantRequest,
-        RunStatus,
+        CreateVectorStoreRequest, FilePurpose, InputSource, MessageContent, MessageRole,
+        ModifyAssistantRequest, RunStatus,
     },
     Client,
 };
@@ -45,7 +48,11 @@ pub async fn assistant_flow(markdown_notes: String) -> Result<(), IntelligenceEr
     let query = [("limit", "1")]; //limit the list responses to 1 message
 
     //create a client
-    let client = Client::new();
+    let client = Client::with_config(
+        OpenAIConfig::new()
+            .with_api_key(env::var("OPENAI_API_KEY").unwrap())
+            .with_org_id("org-cj8ltTe3JDZckoyOR76to9EE"),
+    );
 
     //create a thread for the conversation
     let thread_request = CreateThreadRequestArgs::default().build()?;
@@ -77,7 +84,12 @@ pub async fn assistant_flow(markdown_notes: String) -> Result<(), IntelligenceEr
     let openai_file = client
         .files()
         .create(CreateFileRequest {
-            file: markdown_notes.into(),
+            file: async_openai::types::FileInput {
+                source: InputSource::VecU8 {
+                    filename: "weekly_notes.md".to_string(),
+                    vec: markdown_notes.as_bytes().to_vec(),
+                },
+            },
             purpose: FilePurpose::Assistants,
         })
         .await?;
@@ -119,16 +131,16 @@ pub async fn assistant_flow(markdown_notes: String) -> Result<(), IntelligenceEr
     let mut is_first_loop_iteration = true;
 
     loop {
-        let mut input: String = "".to_string();
-        if is_first_loop_iteration {
+        let input = if is_first_loop_iteration {
             is_first_loop_iteration = false;
-            input = "Let's begin the retro".to_string();
+            "Let's begin the retro".to_string()
         } else {
             println!("--- Enter your input or type 'exit()' to exit");
             //get user input
-            input = String::new();
-            std::io::stdin().read_line(&mut input).unwrap();
-        }
+            let mut user_input = String::new();
+            std::io::stdin().read_line(&mut user_input).unwrap();
+            user_input
+        };
 
         //break out of the loop if the user enters exit()
         if input.trim() == "exit()" {
@@ -138,7 +150,7 @@ pub async fn assistant_flow(markdown_notes: String) -> Result<(), IntelligenceEr
         //create a message for the thread
         let message = CreateMessageRequestArgs::default()
             .role(MessageRole::User)
-            .content(input.clone())
+            .content(input)
             .build()?;
 
         //attach message to the thread

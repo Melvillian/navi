@@ -74,7 +74,7 @@ impl Notion {
                     PageOrDatabase::Database(_) => None, // TODO: support databases
                 })
                 .collect::<Vec<NotionPage>>();
-            debug_assert!(current_notion_pages.len() != res_len, "something other than a page was found in returned info. res_len: {} current_notion_pages.len(): {}", res_len, current_notion_pages.len());
+            debug_assert!(current_notion_pages.len() == res_len, "something other than a page was found in returned info. res_len: {} current_notion_pages.len(): {}", res_len, current_notion_pages.len());
 
             // we only care about pages edited after the cutoff, so we need to
             // cut out the Pages that were edited prior to the cutoff
