@@ -7,7 +7,7 @@ use navi::{
     notion::Notion,
 };
 use notion_client::NotionClientError;
-use std::{collections::HashSet, env};
+use std::{collections::HashSet, env, fs, path::Path};
 
 #[tokio::main]
 async fn main() {
@@ -26,8 +26,18 @@ async fn main() {
 
     let notion = Notion::new(env::var("NOTION_TOKEN").expect("NOTION_TOKEN must be set")).unwrap();
 
-    let prompt_info = ingest_notion(notion, dur).await.unwrap();
-    debug!(target: "notion", "prompt info:\n{}", prompt_info);
+    // ingest notes data from Notion (or from a cached file if it exists)
+    let prompt_info = if matches!(env::var("RUST_LOG").as_deref(), Ok("debug" | "trace"))
+        && Path::new("prompt_info.md").exists()
+    {
+        debug!(target: "notion", "Using cached prompt info from prompt_info.md");
+        fs::read_to_string("prompt_info.md").unwrap()
+    } else {
+        let prompt = ingest_notion(notion, dur).await.unwrap();
+        fs::write("prompt_info.md", &prompt).unwrap();
+        debug!(target: "notion", "prompt info:\n{}", prompt);
+        prompt
+    };
 
     info!(target: "notion", "Analysis complete! Navi is now ready to guide you through the process of reflecting on your notes");
     info!(target: "notion", "Let's begin by asking Navi to start the retro, and see what Navi's response is...");

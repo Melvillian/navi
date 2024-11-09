@@ -35,6 +35,5 @@ vendor/
 # Backup files
 *~
 
-# Ignore any local configuration files
-config.toml
-
+# Ignore prompt cache files that exist for debugging
+prompt_info.md

@@ -54,7 +54,7 @@ pub async fn assistant_flow(markdown_notes: String) -> Result<(), IntelligenceEr
     //create a thread for the conversation
     let thread_request = CreateThreadRequestArgs::default().build()?;
     let thread = client.threads().create(thread_request.clone()).await?;
-    debug!(target: "intelligence", "Thread created with id: {}", thread.id);
+    debug!(target: "intelligence", "Created thread with id: {}", thread.id);
 
     // //ask the user for the name of the assistant
     // info!(target: "intelligence", "--- Enter the name of your assistant");
@@ -90,6 +90,7 @@ pub async fn assistant_flow(markdown_notes: String) -> Result<(), IntelligenceEr
             purpose: FilePurpose::Assistants,
         })
         .await?;
+    debug!(target: "intelligence", "Created file with id: {}", openai_file.id);
 
     // Create a vector store called "Navi Weekly Notes"
     // add uploaded file to vector store
@@ -101,7 +102,7 @@ pub async fn assistant_flow(markdown_notes: String) -> Result<(), IntelligenceEr
             ..Default::default()
         })
         .await?;
-    debug!(target: "intelligence", "Created vector store with id: {}", vector_store.id);
+    debug!(target: "intelligence", "Uploaded file to newly created vector store with id: {}", vector_store.id);
 
     //
     // Step 3: Update the assistant to to use the new Vector Store
@@ -122,11 +123,17 @@ pub async fn assistant_flow(markdown_notes: String) -> Result<(), IntelligenceEr
             },
         )
         .await?;
-    //get the id of the assistant
     let assistant_id = &assistant.id;
 
+    // The first loop in the conversation thread should begin with the assistant
+    // sending a message, but all subsequent loops should begin with the
+    // user responding to the assistant's previous message. For that reason
+    // we need to special-case the first loop iteration
     let mut is_first_loop_iteration = true;
 
+    // main conversation loop, which consists of first asking the user for input
+    // (except for the first loop iteration), then sending that input to the
+    // assistant, and finally receiving the assistant's response and printing it
     loop {
         let input = if is_first_loop_iteration {
             is_first_loop_iteration = false;
