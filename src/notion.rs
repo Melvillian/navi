@@ -1,7 +1,7 @@
 use crate::core::datatypes::{Block, BlockID, Page, PageID};
 use chrono::{DateTime, Duration, Utc};
 use dendron::{Node, Tree};
-use log::{debug, error, info, trace};
+use log::{debug, error, trace};
 use notion_client::{
     endpoints::{
         blocks::retrieve::response::RetrieveBlockChilerenResponse,
@@ -74,7 +74,7 @@ impl Notion {
                     PageOrDatabase::Database(_) => None, // TODO: support databases
                 })
                 .collect::<Vec<NotionPage>>();
-            debug_assert!(current_notion_pages.len() != res_len, "something other than a page was found in returned info. res_len: {} current_notion_pages.len(): {}", res_len, current_notion_pages.len());
+            debug_assert!(current_notion_pages.len() == res_len, "something other than a page was found in returned info. res_len: {} current_notion_pages.len(): {}", res_len, current_notion_pages.len());
 
             // we only care about pages edited after the cutoff, so we need to
             // cut out the Pages that were edited prior to the cutoff
@@ -133,7 +133,7 @@ impl Notion {
                 // the (truncated) block roots that we have. This means we may miss out on
                 // important blocks that were updated since the cutoff, but that's the price
                 // we pay in order to limit the time we spend fetching block children.
-                info!(target: "notion", "aborting block retrieval due to time limit");
+                debug!(target: "notion", "aborting page retrieval due to time limit for Page: {}", &page.title);
                 break;
             }
 
