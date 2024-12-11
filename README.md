@@ -145,15 +145,11 @@ First you will need to make Navi aware of your Notion workspace.
   <img src="img/notion-connection.png" alt="Notion Connection Instructions">
 </div>
 
-3. Go to [OpenAI's API page](https://platform.openai.com/settings/organization/api-keys) and make an API key. For the permissions you can give it the following
-
-<div align="center">
-  <img src="img/openai_api_permissions.png" alt="OpenAI API Permissions">
-</div>
+3. Go to [OpenAI's API page](https://platform.openai.com/settings/organization/api-keys) and make an API key. For the permissions you can give "All", but this is not secure and you should limit it to the minimum permissions needed for your use case when/if you deploy to production.
 
 4. Add the OpenAI API key to your `.env` file
 5. `cargo build`
-6. `cargo run`
+6. `RUST_LOG=debug cargo run` # debug will give more info, and will cache the exobrain note data to a local file called prompt_info.md
 7. Finally, have a retro conversation with Navi!
 
 ## Helpful Tools
