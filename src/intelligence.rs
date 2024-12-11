@@ -42,7 +42,7 @@ pub async fn assistant_flow(markdown_notes: String) -> Result<(), OpenAIError> {
     // assistant, and finally receiving the assistant's response and printing it
     loop {
         let request = CreateChatCompletionRequestArgs::default()
-            .max_tokens(5120u32)
+            .max_tokens(20000u32)
             .model("gpt-4o-mini")
             .messages(&*messages)
             .n(1) // only 1 response
