@@ -11,7 +11,7 @@ The point is to have an personalized digital mentor that understands you, and ca
  
 To use it, you connect your notesource (for now, just [Notion](https://www.notion.com/)) and then run the Navi CLI, which ingests the last week's of your notes and uses them to inform an LLM digital mentor ([OpenAI](https://openai.com/) for now) on how best to do a retrospective with you on your week.
 
-## Example Retro Conversattion
+## Example Retro Conversation
 
 ```markdown
 ➜  navi git:(add-intelligence-first-attempt) ✗ RUST_LOG=debug cargo run                                [09:45:21]
