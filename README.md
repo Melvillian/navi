@@ -172,4 +172,5 @@ First you will need to make Navi aware of your Notion workspace.
 - [x] Prompt retro with latest 7 days of exobrain data
 - [x] Build conversation datastructure so I can have a retro with my last 7 days of exobrain data
 - [ ] optimization: remove blocks from the final expanded block roots Tree datastructure that were last edited prior to the cutoff
+- [ ] convert to typescript
 - [ ] Make more TODOs
