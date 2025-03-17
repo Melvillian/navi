@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    /* Visit https://aka.ms/tsconfig to read more about this file */
+
+    /* Projects */
+    /* Setting it to true, would create a tsconfig.tsbuildinfo file */
+    "incremental": false,
+
+    /* Language and Environment */
+    "target": "es6",
+
+    /* Modules */
+    /* You still need to use the '.js' extension in your import statements */
+    "module": "es6",
+    "lib": ["dom", "es6"],
+
+    /* Emit */
+    "outDir": "../dist/client",
+    "removeComments": true,
+
+    /* Interop Constraints */
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* Type Checking */
+    "strict": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+
+    /* Completeness */
+    "skipLibCheck": true
+  }
+}
