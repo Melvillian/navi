@@ -1,0 +1,75 @@
+{
+  "scripts": {
+    "dev:client": "tsc --preserveWatchOutput -p ./client -w",
+    "dev:server": "tsc --preserveWatchOutput -p ./server -w",
+    "dev:server:run": "nodemon -w ./dist/server ./dist/server/app.js",
+    "dev": "concurrently -r -k \"npm:dev:*\"",
+    "clean": "rm -rf ./dist",
+    "build": "npm run clean && npm run build:server && npm run build:client",
+    "build:client": "tsc -p ./client",
+    "build:server": "tsc -p ./server && ./scripts/copy-server-views.sh",
+    "postinstall": "npm run build",
+    "lint": "eslint . --ext .ts",
+    "prestart": "npm run build",
+    "start": "NODE_ENV=production node ./dist/server/app.js"
+  },
+  "nodemonConfig": {
+    "delay": 1500
+  },
+  "prettier": {
+    "printWidth": 80,
+    "singleQuote": true
+  },
+  "eslintConfig": {
+    "extends": [
+      "airbnb-typescript/base"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "ecmaVersion": "latest",
+      "sourceType": "module",
+      "project": [
+        "./server/tsconfig.json",
+        "./client/tsconfig.json"
+      ]
+    },
+    "plugins": [
+      "@typescript-eslint",
+      "import"
+    ],
+    "rules": {
+      "@typescript-eslint/comma-dangle": [
+        "warn",
+        {
+          "arrays": "always-multiline",
+          "objects": "always-multiline",
+          "functions": "never"
+        }
+      ]
+    }
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/morgan": "^1.9.9",
+    "@types/node": "^20.10.2",
+    "@typescript-eslint/eslint-plugin": "^6.13.1",
+    "@typescript-eslint/parser": "^6.13.1",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.55.0",
+    "eslint-config-airbnb-typescript": "^17.1.0",
+    "eslint-plugin-import": "^2.29.0",
+    "nodemon": "^3.0.2",
+    "typescript": "^5.3.2"
+  },
+  "dependencies": {
+    "chota": "^0.9.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "helmet": "^7.1.0",
+    "htmx.org": "^1.9.9",
+    "morgan": "^1.10.0"
+  }
+}

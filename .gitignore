@@ -37,3 +37,7 @@ vendor/
 
 # Ignore prompt cache files that exist for debugging
 prompt_info.md
+
+# Ignore the dist directory
+dist/
+node_modules/
