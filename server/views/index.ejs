@@ -22,9 +22,34 @@
             hx-get="/api/server-time"
             hx-target="previous p"
           >
-            Update server time
+            Update server timessss
           </button>
         </p>
+        <p>
+          <button
+            id="fetchBlocksBtn"
+            class="button primary"
+            hx-get="/api/fetch-blocks"
+            hx-target="#blocksContainer"
+          >
+            Fetch blocks
+          </button>
+        </p>
+        <div id="blocksContainer">
+          <% if (typeof blocks !== 'undefined' && blocks.length > 0) { %>
+            <% blocks.forEach(function(block) { %>
+              <div class="block">
+                <% if (typeof block === 'string') { %>
+                  <%= block %>
+                <% } else { %>
+                  <pre><%= JSON.stringify(block, null, 2) %></pre>
+                <% } %>
+              </div>
+            <% }); %>
+          <% } else { %>
+            <p>Blocks will appear here</p>
+          <% } %>
+        </div>
       </div>
     </main>
 
