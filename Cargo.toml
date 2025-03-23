@@ -18,3 +18,4 @@ dendron = "0.1.5"
 derive_more = { version = "1.0.0", features = ["full"] }
 async-openai = "0.25.0"
 thiserror = "1.0.65"
+clap = { version = "4.5.1", features = ["derive"] }

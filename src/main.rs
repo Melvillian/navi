@@ -1,4 +1,5 @@
 use chrono::{Duration, Utc};
+use clap::Parser;
 use dotenv::dotenv;
 use log::{debug, info, trace};
 use navi::{
@@ -12,19 +13,26 @@ use navi::{
 use notion_client::NotionClientError;
 use std::{collections::HashSet, env, fs, path::Path};
 
+#[derive(Parser, Debug)]
+#[command(author, version, about, long_about = None)]
+struct Args {
+    /// Number of days to look back for notes
+    #[arg(short, long, default_value = "7")]
+    days: i64,
+}
+
 #[tokio::main]
 async fn main() {
     dotenv().ok();
     env_logger::init();
 
-    // TODO, make this a CLI arg, for now we're just differentiating
-    // between DEBUG and non-debug to speed iterating on debugging
+    let args = Args::parse();
     let dur: Duration = Duration::days(match env::var("RUST_LOG") {
         Ok(log_level) => match log_level.to_lowercase().as_str() {
             "debug" | "trace" => 1,
-            _ => 7,
+            _ => args.days,
         },
-        Err(_) => 7, // it means RUST_LOG is not set, so we default to 7 days
+        Err(_) => args.days,
     });
 
     let notion = Notion::new(env::var("NOTION_TOKEN").expect("NOTION_TOKEN must be set")).unwrap();
@@ -53,7 +61,7 @@ async fn parse_last_edited(
     notion: Notion,
     dur: Duration,
 ) -> Result<Vec<ParsedNotionPage>, NotionClientError> {
-    info!(target: "notion", "Thanks for choosing Navi as your digital mentor! Navi will begin by analyzing your last {} days of notes. This may take several minutes, depending on how dedicated a notetaker you are...", dur.num_days());
+    info!(target: "notion", "Thanks for choosing Navi as your digital mentor! Navi will begin by analyzing your last {} {} of notes. This may take several minutes, depending on how dedicated a notetaker you are...", dur.num_days(), if dur.num_days() == 1 { "day" } else { "days" });
     let cutoff = Utc::now() - dur;
 
     let pages_edited_after_cutoff_date = notion.get_last_edited_pages(cutoff).await.unwrap();
