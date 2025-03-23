@@ -19,6 +19,10 @@ struct Args {
     /// Number of days to look back for notes
     #[arg(short, long, default_value = "7")]
     days: i64,
+
+    /// If true, use the prompt_info.md file to store the prompt info, otherwise generate a new prompt
+    #[arg(short, long, default_value = "false")]
+    use_prompt_info_file: bool,
 }
 
 #[tokio::main]
@@ -26,27 +30,24 @@ async fn main() {
     dotenv().ok();
     env_logger::init();
 
-    let args = Args::parse();
-    let dur: Duration = Duration::days(match env::var("RUST_LOG") {
-        Ok(log_level) => match log_level.to_lowercase().as_str() {
-            "debug" | "trace" => 1,
-            _ => args.days,
-        },
-        Err(_) => args.days,
-    });
+    let Args {
+        days,
+        use_prompt_info_file,
+    } = Args::parse();
+    let dur = Duration::days(days);
 
     let notion = Notion::new(env::var("NOTION_TOKEN").expect("NOTION_TOKEN must be set")).unwrap();
 
     // ingest notes data from Notion (or from a cached file if it exists)
-    let prompt_info = if matches!(env::var("RUST_LOG").as_deref(), Ok("debug" | "trace"))
-        && Path::new("prompt_info.md").exists()
-    {
-        debug!(target: "notion", "Using cached prompt info from prompt_info.md");
+    let prompt_info = if use_prompt_info_file && Path::new("prompt_info.md").exists() {
+        info!(target: "notion", "Using cached prompt info from prompt_info.md");
         fs::read_to_string("prompt_info.md").unwrap()
     } else {
         let parsed_pages = parse_last_edited(notion, dur).await.unwrap();
         let prompt = to_prompt_text(parsed_pages).unwrap();
-        fs::write("prompt_info.md", &prompt).unwrap();
+        if use_prompt_info_file {
+            fs::write("prompt_info.md", &prompt).unwrap();
+        }
         debug!(target: "notion", "prompt info:\n{}", prompt);
         prompt
     };
