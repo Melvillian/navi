@@ -1,4 +1,5 @@
 use chrono::{DateTime, Utc};
+use dendron::Tree;
 use derive_more::{Deref, Display};
 use notion_client::objects::block::{Block as NotionBlock, BlockType};
 use notion_client::objects::parent::Parent;
@@ -122,6 +123,14 @@ pub struct Page {
     pub creation_date: DateTime<Utc>,
     pub update_date: DateTime<Utc>,
     pub child_blocks: Vec<Block>,
+}
+
+/// A ParsedNotionPage represents a page that has been processed and contains its content as a tree of blocks.
+#[derive(Debug, Clone)]
+pub struct ParsedNotionPage {
+    pub page_id: PageID,
+    pub title: String,
+    pub page_content: Vec<Tree<Block>>,
 }
 
 #[cfg(test)]

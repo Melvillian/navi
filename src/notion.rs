@@ -106,7 +106,9 @@ impl Notion {
     ///
     /// Note: we do not include the `Page` itself as a block root, because then the content of every single `Page` that
     /// was updated within the duration would be included (that's a ton!), when all we want is the individual
-    /// `Block`s within that `Page` that were updated within the duration.
+    /// `Block`s within that `Page` that were updated within the duration. The complication stems (ha!)
+    /// from the fact that Notion treats Pages and Blocks both as Blocks, even though a Page is a special
+    /// type of Block by way of it's `last_edited_time` property being updated whenever a child Block is updated.
     ///
     /// # Returns
     /// A `Result` containing a `Vec` of all the `Page`'s descendant `Block`s that were updated between within `dur`.
