@@ -25,7 +25,7 @@ To use it, you connect your notesource (for now, just [Notion](https://www.notio
     
     #### a. Categorization of Topics Mentioned
     1. **Job Search and Interviews**
-       - Communications and processes at Uniswap and Coinbase
+       - Communications and processes at <Company 2 Name> and <Company Name>
        - Interview preparation strategies
        
     2. **Healthcare Research**
@@ -44,12 +44,12 @@ To use it, you connect your notesource (for now, just [Notion](https://www.notio
     #### b. List of People Communicated With
     - **Evan Litwin**: Discussed housing and politics
     - **David (Marathon)**: Discussed bikes, personal upbringing, and socio-political issues
-    - **Josh**: Interview connection at Uniswap
-    - **Chris**: Uniswap backend team member
-    - **Kevin Quinn**: Interview connection at Coinbase
+    - **Josh**: Interview connection at <Company 2 Name>
+    - **Chris**: <Company 2 Name> backend team member
+    - **Kevin**: Interview connection at <Company Name>
     
     #### c. List of Accomplishments
-    - Explored and created detailed notes for interviews at Coinbase and Uniswap.
+    - Explored and created detailed notes for interviews at <Company Name> and <Company 2 Name>.
     - Engaged in multiple insightful conversations regarding healthcare, political representation, and community issues.
     - Developed a deeper understanding of software characteristics through *Designing Data-Intensive Applications*.
     
@@ -58,9 +58,9 @@ To use it, you connect your notesource (for now, just [Notion](https://www.notio
     Do you have anything to add to the synopsis that I might have missed?
     
 [2024-11-09T14:45:28Z INFO  intelligence] --- Enter your input or type 'exit()' to exit
-I am wondering how it is best to proceed with the Uniswap interview, which is for a position working on their Uniswap-focused L2 called Unichain. I am also interviewing at Coinbase to work on Base but I care a lot more about Uniswap. 
+I am wondering how it is best to proceed with the <Company 2 Name> interview, which is for a position working on their <Company 2 Name>-focused L2 called Unichain. I am also interviewing at <Company Name> to work on Base but I care a lot more about <Company 2 Name>. 
 [2024-11-10T19:34:02Z DEBUG reqwest::connect] starting new connection: https://api.openai.com/
-[2024-11-10T19:34:04Z INFO  intelligence] --- Response: Thank you for sharing that! I will keep your focus on the Uniswap interview in mind as we proceed. 
+[2024-11-10T19:34:04Z INFO  intelligence] --- Response: Thank you for sharing that! I will keep your focus on the <Company 2 Name> interview in mind as we proceed. 
     
     Are you ready to move on to Step 2: "What went well since the last retro?" If so, please share your thoughts!
     
@@ -72,7 +72,7 @@ Yes. I think this week was mostly a period of rest for me. I had a lot of fun ta
     Now, let’s move on to Step 3: "What didn't go well since the last retro?" What challenges or issues did you encounter during this period?
     
 [2024-11-10T19:35:41Z INFO  intelligence] --- Enter your input or type 'exit()' to exit
-I didn't accomplish much. I had wanted to do more of my Navi tasks, and do more coding challenges to prepare for the Uniswap and Coinbase interviews. I felt like my normal ratio of work-to-personal-consumption skewed more towards work than I'm used to. This week I want to be more intentional and productive. 
+I didn't accomplish much. I had wanted to do more of my Navi tasks, and do more coding challenges to prepare for the <Company 2 Name> and <Company Name> interviews. I felt like my normal ratio of work-to-personal-consumption skewed more towards work than I'm used to. This week I want to be more intentional and productive. 
 [2024-11-11T15:56:45Z DEBUG reqwest::connect] starting new connection: https://api.openai.com/
 
 [2024-11-11T15:56:47Z INFO  intelligence] --- Response: It's totally understandable to feel that way, especially when balancing personal time and professional aspirations. It's great that you've gained awareness about your work-to-personal consumption ratio. Acknowledging it is the first step toward finding a better balance.
@@ -90,7 +90,7 @@ I didn't accomplish much. I had wanted to do more of my Navi tasks, and do more 
        
     2. **Daily Goals for Navi Tasks**: Break down your work on the CLI version of Navi into smaller tasks and set a daily goal, such as completing one portion per day.
     
-    3. **Interview Preparation**: Allocate time each day to focus on Uniswap and Coinbase interview preparation, perhaps through research or practicing interviews.
+    3. **Interview Preparation**: Allocate time each day to focus on <Company 2 Name> and <Company Name> interview preparation, perhaps through research or practicing interviews.
     
     What do you think? Feel free to adjust these suggestions or add your own! We can refine them into SMART tasks together.
     
@@ -103,7 +103,7 @@ These sound good to me
        - **Specific**: Dedicate one hour each weekday.
        - **Measurable**: Complete a coding challenge during each session.
        - **Achievable**: Aim for 5 total hours of coding challenges per week.
-       - **Relevant**: Prepare specifically for your interviews at Uniswap and Coinbase.
+       - **Relevant**: Prepare specifically for your interviews at <Company 2 Name> and <Company Name>.
        - **Time-Oriented**: Start this from the upcoming Monday, aiming to complete it by Friday.
     
     2. **Daily Goals for Navi Tasks**:
@@ -114,7 +114,7 @@ These sound good to me
        - **Time-Oriented**: Implement this daily for the next week.
     
     3. **Interview Preparation**:
-       - **Specific**: Spend 30 minutes each day researching or practicing for Uniswap and Coinbase interviews.
+       - **Specific**: Spend 30 minutes each day researching or practicing for <Company 2 Name> and <Company Name> interviews.
        - **Measurable**: Track by noting which topics or questions you've covered each day.
        - **Achievable**: Starting this week allows you to build on it over time.
        - **Relevant**: Focus on areas of the interview that are most crucial for your potential roles.
