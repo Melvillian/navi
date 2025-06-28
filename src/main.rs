@@ -1,9 +1,8 @@
 use chrono::Duration;
 use clap::Parser;
-use dotenv::dotenv;
 use log::{debug, info};
 use navi::{intelligence::assistant_flow, notion::Notion};
-use std::{env, fs, path::Path};
+use std::{env, fs, path::Path, time::Instant};
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -19,6 +18,8 @@ struct Args {
 
 #[tokio::main]
 async fn main() {
+    let program_start = Instant::now();
+
     let manifest_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
     let dotenv_path = format!("{}/.env", manifest_dir);
     dotenv::from_path(dotenv_path).ok();
@@ -48,6 +49,10 @@ async fn main() {
 
     info!(target: "notion", "Analysis complete! Navi is now ready to guide you through the process of reflecting on your notes");
     info!(target: "notion", "Let's begin by asking Navi to start the retro, and see what Navi's response is...");
+
+    // Log the total time to get to the first prompt
+    let total_elapsed = program_start.elapsed();
+    info!(target: "intelligence", "--- Total time to first prompt: {:.2} seconds", total_elapsed.as_secs_f64());
 
     assistant_flow(prompt_info).await.unwrap();
 }

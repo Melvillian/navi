@@ -11,5 +11,5 @@ page_patterns = [
   # ".*draft.*",          # Excludes pages with "draft" in the title  
   # ".*archive.*",        # Excludes pages with "archive" in the title
   # "https://.*/test-.*", # Excludes pages with URLs containing "test-"
-  "Place to Store Pages", # this is a huge page only exists to stores links to other pages
+  "Place To Store Pages", # this is a huge page only exists to stores links to other pages
 ]

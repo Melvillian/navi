@@ -7,6 +7,7 @@ use async_openai::{
     Client,
 };
 use log::info;
+use std::time::Instant;
 
 const NAVI_INSTRUCTIONS: &str = "I want you to lead a retrospective for me using the information from my weekly notes. You have a vast experience with running retrospectives, and have read all of the most important writing on how to deliver fun, useful, and high-signal retro's from people like Esther Derby and Ben Linders.
 
@@ -37,6 +38,9 @@ pub async fn assistant_flow(markdown_notes: String) -> Result<(), OpenAIError> {
     //create a client
     let client = Client::new();
 
+    // Track timing for each call
+    let mut previous_call_start = Instant::now();
+
     // main conversation loop, which consists of first asking the user for input
     // (except for the first loop iteration), then sending that input to the
     // assistant, and finally receiving the assistant's response and printing it
@@ -60,6 +64,10 @@ pub async fn assistant_flow(markdown_notes: String) -> Result<(), OpenAIError> {
                 .into(),
         );
 
+        // Calculate and log the time taken for the previous call
+        let elapsed = previous_call_start.elapsed();
+        info!(target: "intelligence", "--- Previous call took {:.2} seconds", elapsed.as_secs_f64());
+
         info!(target: "intelligence", "--- Enter your input or type 'exit()' to exit");
         //get user input
         let mut input = String::new();
@@ -76,6 +84,9 @@ pub async fn assistant_flow(markdown_notes: String) -> Result<(), OpenAIError> {
                 .build()?
                 .into(),
         );
+
+        // Update the start time for the next call
+        previous_call_start = Instant::now();
     }
     Ok(())
 }
