@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.melvillian.navi</string>
+    
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/melvillian/code/navi/scripts/navi_launchd_wrapper.sh</string>
+    </array>
+    
+    <key>StartCalendarInterval</key>
+    <array>
+        <dict>
+            <key>Hour</key>
+            <integer>9</integer>
+            <key>Minute</key>
+            <integer>0</integer>
+        </dict>
+    </array>
+    
+    <key>StandardOutPath</key>
+    <string>/Users/melvillian/code/navi/navi_launchd_stdout.log</string>
+    
+    <key>StandardErrorPath</key>
+    <string>/Users/melvillian/code/navi/navi_launchd_stderr.log</string>
+    
+    <key>WorkingDirectory</key>
+    <string>/Users/melvillian/code/navi</string>
+    
+    <key>RunAtLoad</key>
+    <false/>
+    
+    <key>KeepAlive</key>
+    <false/>
+    
+    <key>ProcessType</key>
+    <string>Background</string>
+</dict>
+</plist> 

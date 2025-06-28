@@ -1,0 +1,15 @@
+# Navi Configuration File
+# This file allows you to configure various aspects of Navi's behavior
+
+[exclusions]
+# Array of regex patterns that will exclude pages from being fetched
+# If any of these patterns match a page title or URL, that page will be skipped
+# and never fetched again
+page_patterns = [
+  # Example patterns (uncomment and modify as needed):
+  # ".*temp.*",           # Excludes pages with "temp" in the title
+  # ".*draft.*",          # Excludes pages with "draft" in the title  
+  # ".*archive.*",        # Excludes pages with "archive" in the title
+  # "https://.*/test-.*", # Excludes pages with URLs containing "test-"
+  "Place to Store Pages", # this is a huge page only exists to stores links to other pages
+]

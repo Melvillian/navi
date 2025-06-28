@@ -1,3 +1,6 @@
+# Navi-specific ignores
+navi_last_run.log
+
 # Rust-specific ignores
 /target/
 **/*.rs.bk

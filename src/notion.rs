@@ -1,10 +1,11 @@
+use crate::config::Config;
 use crate::core::{
     datatypes::{Block, BlockID, Page, PageID},
     helpers::build_markdown_from_trees,
 };
 use chrono::{DateTime, Duration, Utc};
 use dendron::{Node, Tree};
-use log::{debug, error, info, trace};
+use log::{debug, error, info, trace, warn};
 use notion_client::{
     endpoints::{
         blocks::retrieve::response::RetrieveBlockChilerenResponse,
@@ -21,6 +22,7 @@ use std::collections::{HashSet, VecDeque};
 
 pub struct Notion {
     client: Client,
+    config: Config,
 }
 
 /// A ParsedNotionPage represents a page that has been processed and contains its content as a tree of blocks.
@@ -34,8 +36,13 @@ pub struct ParsedNotionPage {
 impl Notion {
     pub fn new(token: String) -> Result<Self, NotionClientError> {
         let client = Client::new(token, None);
+        let config = Config::load().unwrap_or_else(|e| {
+            debug!("no navi.toml config file found: {}, using default", e);
+            Config::default()
+        });
+
         match client {
-            Ok(c) => Ok(Notion { client: c }),
+            Ok(c) => Ok(Notion { client: c, config }),
             Err(e) => Err(e),
         }
     }
@@ -64,6 +71,12 @@ impl Notion {
         let mut expanded_blocks_duplicates_checker: HashSet<Block> = HashSet::new();
         for page in pages_edited_after_cutoff_date {
             debug!(target: "notion", "Page URL: {}", page.url);
+
+            // Check if this page should be excluded based on configuration
+            if self.config.should_exclude_page(&page.title, &page.url) {
+                debug!(target: "notion", "Skipping excluded page: {}", page.title);
+                continue;
+            }
 
             let new_block_roots = self
                 .get_page_block_roots(&page, cutoff, &mut block_roots_duplicates_checker)
@@ -453,5 +466,35 @@ impl Notion {
                 )
                 .await?,
         })
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::config::Config;
+
+    #[tokio::test]
+    async fn test_parse_last_edited_excludes_pages() {
+        // Create a mock Notion instance with exclusion config
+        let mut config = Config::default();
+        config
+            .exclusions
+            .page_patterns
+            .push(".*exclude.*".to_string());
+
+        // Create a Notion instance with the config
+        let notion = Notion {
+            client: Client::new("fake_token".to_string(), None).unwrap(),
+            config,
+        };
+
+        // Test that the config is properly loaded
+        assert!(notion
+            .config
+            .should_exclude_page("exclude this page", "https://example.com"));
+        assert!(!notion
+            .config
+            .should_exclude_page("include this page", "https://example.com"));
     }
 }

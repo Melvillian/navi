@@ -19,7 +19,9 @@ struct Args {
 
 #[tokio::main]
 async fn main() {
-    dotenv().ok();
+    let manifest_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
+    let dotenv_path = format!("{}/.env", manifest_dir);
+    dotenv::from_path(dotenv_path).ok();
     env_logger::init();
 
     let Args {
